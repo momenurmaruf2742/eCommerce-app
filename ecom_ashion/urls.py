@@ -22,7 +22,7 @@ from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
 urlpatterns = [
     path('', include('home.urls'),name='home'),
     path('shop', include('shop.urls'),name='shop'),
-    path('blog', include('blog.urls'),name='blog'),
+    path('blog/', include('blog.urls'),name='blog'),
     path('admin/', admin.site.urls),
 ]
 

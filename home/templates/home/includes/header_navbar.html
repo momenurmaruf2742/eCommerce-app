@@ -51,7 +51,7 @@
                                 <li><a href="./product-details.html">Product Details</a></li>
                                 <li><a href="./shop-cart.html">Shop Cart</a></li>
                                 <li><a href="./checkout.html">Checkout</a></li>
-                                <li><a href="./blog-details.html">Blog Details</a></li>
+                                <li><a href="{% url 'blog-details' %}">Blog Details</a></li>
                             </ul>
                         </li>
                         <li {% if activate == 'blog' %}class="active"{% endif %}><a href="{% url 'blog' %}">Blog</a></li>

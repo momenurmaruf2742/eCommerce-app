@@ -13,3 +13,9 @@ class Blog(View):
         # <view logic>
         return render(request,'blog/blog.html',{'activate':activate})
 
+class BlogDetails(View):
+    def get(self, request):
+        activate="blog"
+        # <view logic>
+        return render(request,'blog/blog-details.html',{'activate':activate})
+
