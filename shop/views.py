@@ -10,9 +10,14 @@ from django.http import HttpResponse
 
 class Shop(View):
     def get(self, request):
+        products = Product.objects.all()
         activate = 'shop'
+        context={
+            'activate':activate,
+            'products':products
+        }
         # <view logic>
-        return render(request,'shop/shop.html',{'activate':activate})
+        return render(request,'shop/shop.html',context)
 
 def product_detail(request,category_slug,product_slug):
     try:

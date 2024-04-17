@@ -23,6 +23,8 @@ urlpatterns = [
     path('', include('home.urls'),name='home'),
     path('shop', include('shop.urls'),name='shop'),
     path('blog/', include('blog.urls'),name='blog'),
+    # accounts
+    path('', include('accounts.urls')),
     path('admin/', admin.site.urls),
 ]
 

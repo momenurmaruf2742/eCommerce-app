@@ -6,9 +6,19 @@ from django.urls import reverse
 # Create your models here.
 
 
-class Variation(models.Model):
+class VariationColor(models.Model):
+    name = models.CharField(max_length=50)
     color=ColorField()
-    size=models.CharField(max_length=2)
+    is_active = models.BooleanField(default=True,null=True,blank=True)
+
+    def __str__(self):
+        return self.name
+class VariationSize(models.Model):
+    name = models.CharField(max_length=50)
+    size=models.CharField(max_length=3)
+    is_active = models.BooleanField(default=True,null=True,blank=True)
+    def __str__(self):
+        return self.size
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     brand = models.CharField(max_length=255)
@@ -16,8 +26,8 @@ class Product(models.Model):
     price = models.IntegerField()
     slug = models.SlugField(max_length=200,unique=True)
     description = models.TextField(max_length=500,blank=True)
-    available_color = models.ForeignKey(Variation,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_color')
-    available_size = models.ForeignKey(Variation,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_size')
+    available_color = models.ForeignKey(VariationColor,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_color')
+    available_size = models.ForeignKey(VariationSize,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_size')
     images = models.ImageField(upload_to = 'photo/products')
     stock = models.IntegerField()
     is_available = models.BooleanField(default=True)

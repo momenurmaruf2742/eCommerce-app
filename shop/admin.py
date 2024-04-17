@@ -8,7 +8,12 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Product,ProductAdmin)
 
-class VariationsAdmin(admin.ModelAdmin):
-    list_display=("color","size")
+class VariationsColorAdmin(admin.ModelAdmin):
+    list_display=("name","color")
 
-admin.site.register(Variation,VariationsAdmin)
+admin.site.register(VariationColor ,VariationsColorAdmin)
+
+class VariationsSizeAdmin(admin.ModelAdmin):
+    list_display=("name","size")
+
+admin.site.register(VariationSize,VariationsSizeAdmin)
