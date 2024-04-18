@@ -30,10 +30,25 @@ class Product(models.Model):
     available_size = models.ForeignKey(VariationSize,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_size')
     images = models.ImageField(upload_to = 'photo/products')
     stock = models.IntegerField()
+
+    discount = models.FloatField(default=0.0)
+    discounted_price = models.FloatField(default=0.0)
+    sell_price = models.FloatField(default=0.0)
+
     is_available = models.BooleanField(default=True)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
+    
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
+    
+    def save(self,*args,**kwargs):
+        discounted_price= ((self.price)*(self.discount))/100
+        sell_price = (self.price)-(self.discounted_price)
+
+        self.discounted_price=discounted_price
+        self.sell_price=sell_price
+
+        super(Product, self).save(*args, **kwargs)
 
     def get_url(self):
         return reverse('product_detail', args=[self.category.slug, self.slug])
