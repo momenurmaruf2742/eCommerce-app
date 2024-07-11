@@ -29,4 +29,5 @@ def product_detail(request,category_slug,product_slug):
     context={
         'single_product':single_product,
     }
+    print(context,"afsdddd")
     return render(request,'shop/product_details.html',context)
