@@ -54,3 +54,34 @@ class Product(models.Model):
         return reverse('product_detail', args=[self.category.slug, self.slug])
     def __str__(self):
         return self.product_name
+    
+from django.db import models
+from django.utils.safestring import mark_safe
+    
+class Image(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, null=True
+        )
+    image = models.ImageField(blank=True, upload_to='images')
+
+    def __str__(self):
+        return self.product.title
+
+    def image_tag(self):
+        if self.image.url is not None:
+            return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
+        else:
+            return ""
+
+
+class Variant(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE
+        )
+    size = models.CharField(max_length=100)
+    color = ColorField()
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
+
+    def __str__(self):
+        return self.product.title
