@@ -22,12 +22,13 @@ class Shop(View):
 def product_detail(request,category_slug,product_slug):
     try:
         single_product = Product.objects.get(category__slug=category_slug,slug=product_slug)
-        
+        image = Image.objects.get(category__slug=category_slug,slug=product_slug)
         
     except Exception as e:
         raise e
     context={
         'single_product':single_product,
+        'image':image,
     }
-    print(context,"afsdddd")
+    print(context,"afsddddkjjjjjjjjjjjjjjjjjjjjjjjjj")
     return render(request,'shop/product_details.html',context)

@@ -5,20 +5,6 @@ from category.models import Category
 from django.urls import reverse
 # Create your models here.
 
-
-class VariationColor(models.Model):
-    name = models.CharField(max_length=50)
-    color=ColorField()
-    is_active = models.BooleanField(default=True,null=True,blank=True)
-
-    def __str__(self):
-        return self.name
-class VariationSize(models.Model):
-    name = models.CharField(max_length=50)
-    size=models.CharField(max_length=3)
-    is_active = models.BooleanField(default=True,null=True,blank=True)
-    def __str__(self):
-        return self.size
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     brand = models.CharField(max_length=255)
@@ -26,9 +12,9 @@ class Product(models.Model):
     price = models.IntegerField()
     slug = models.SlugField(max_length=200,unique=True)
     description = models.TextField(max_length=500,blank=True)
-    available_color = models.ForeignKey(VariationColor,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_color')
-    available_size = models.ForeignKey(VariationSize,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_size')
-    images = models.ImageField(upload_to = 'photo/products')
+    # available_color = models.ForeignKey(VariationColor,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_color')
+    # available_size = models.ForeignKey(VariationSize,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_size')
+    # images = models.ImageField(upload_to = 'photo/products')
     stock = models.IntegerField()
 
     discount = models.FloatField(default=0.0)
@@ -62,10 +48,10 @@ class Image(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, null=True
         )
-    image = models.ImageField(blank=True, upload_to='images')
+    image = models.ImageField(blank=True,upload_to = 'photo/products')
 
     def __str__(self):
-        return self.product.title
+        return self.product.product_name
 
     def image_tag(self):
         if self.image.url is not None:
@@ -84,4 +70,4 @@ class Variant(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=2)
 
     def __str__(self):
-        return self.product.title
+        return self.product.product_name
