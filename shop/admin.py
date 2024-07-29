@@ -3,8 +3,8 @@ from .models import *
 # Register your models here.
 
 
-admin.site.register(Image)
-admin.site.register(Variant)
+# admin.site.register(Image)
+# admin.site.register(Variant)
 class ProductImageInline(admin.TabularInline):
     model = Image
     readonly_fields = ('id', 'image_tag',)

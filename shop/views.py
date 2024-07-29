@@ -11,10 +11,12 @@ from django.http import HttpResponse
 class Shop(View):
     def get(self, request):
         products = Product.objects.all()
+        product_images = {product.id: Image.objects.filter(product=product).first() for product in products}
         activate = 'shop'
         context={
             'activate':activate,
-            'products':products
+            'products':products,
+            'product_images':product_images,
         }
         # <view logic>
         return render(request,'shop/shop.html',context)
@@ -28,7 +30,7 @@ def product_detail(request,category_slug,product_slug):
         raise e
     context={
         'single_product':single_product,
-        'image':images,
+        'images':images,
     }
     print(context,"afsddddkjjjjjjjjjjjjjjjjjjjjjjjjj")
     return render(request,'shop/product_details.html',context)
