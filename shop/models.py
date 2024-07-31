@@ -15,7 +15,7 @@ class Product(models.Model):
     # available_color = models.ForeignKey(VariationColor,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_color')
     # available_size = models.ForeignKey(VariationSize,null=True,blank=True,on_delete=models.DO_NOTHING,related_name='available_size')
     # images = models.ImageField(upload_to = 'photo/products')
-    stock = models.IntegerField()
+    stock = models.IntegerField(default=0)
 
     discount = models.FloatField(default=0.0)
     discounted_price = models.FloatField(default=0.0)
@@ -64,10 +64,15 @@ class Variant(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE
         )
-    size = models.CharField(max_length=100)
-    color = ColorField()
+    size = models.CharField(blank=True,null=True,max_length=100)
+    color = ColorField(null=True,default='')
     quantity = models.PositiveIntegerField(default=1)
-    price = models.DecimalField(max_digits=12, decimal_places=2)
+    price = models.DecimalField(null=True,blank=True,max_digits=12, decimal_places=2)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.price = self.product.price
+        super(Variant, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.product.product_name
