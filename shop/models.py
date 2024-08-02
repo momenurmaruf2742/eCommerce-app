@@ -3,6 +3,9 @@ from colorfield.fields import ColorField
 
 from category.models import Category
 from django.urls import reverse
+
+from django.utils import timezone
+from datetime import timedelta
 # Create your models here.
 
 class Product(models.Model):
@@ -27,6 +30,9 @@ class Product(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
     
+    
+    def is_new(self):
+        return self.created_date >= timezone.now() - timedelta(days=3)
     def save(self,*args,**kwargs):
         discounted_price= ((self.price)*(self.discount))/100
         sell_price = (self.price)-(self.discounted_price)

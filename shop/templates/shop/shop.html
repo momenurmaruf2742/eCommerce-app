@@ -29,18 +29,19 @@
                         </div>
                         <div class="categories__accordion">
                             <div class="accordion" id="accordionExample">
-                                {% for category in category_links %}
+                                {% for category in categories %}
                                     {% if not category.parent %}
                                         <!-- This is a top-level parent category -->
                                         <div class="card">
                                             <div class="card-heading active">
+                                                <a href="{% url 'shop' %}?category={{ subcategory.id }}">{{ subcategory }}
                                                 <a data-toggle="collapse" data-target="#collapse{{ category.id }}">{{ category.title }}</a>
                                             </div>
                                             <div id="collapse{{ category.id }}" class="collapse" data-parent="#accordionExample">
                                                 <div class="card-body">
                                                     <ul>
                                                         {% for subcategory in category.children.all %}
-                                                            <li><a href="#">{{ subcategory }}</a></li>
+                                                            <li><a href="{% url 'shop' %}?category={{ subcategory.id }}">{{ subcategory }}</a></li>
                                                         {% endfor %}
                                                     </ul>
                                                 </div>
@@ -52,115 +53,57 @@
                         </div>
                     </div>
                     <div class="sidebar__filter">
-                        <div class="section-title">
-                            <h4>Shop by price</h4>
-                        </div>
-                        <div class="filter-range-wrap">
-                            <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                            data-min="33" data-max="99"></div>
-                            <div class="range-slider">
-                                <div class="price-input">
-                                    <p>Price:</p>
-                                    <input type="text" id="minamount">
-                                    <input type="text" id="maxamount">
+                        <form id="filter-form" method="GET" action="{% url 'shop' %}">
+                            <!-- Filter by Price -->
+                            <div class="section-title">
+                                <h4>Shop by price</h4>
+                            </div>
+                            <div class="filter-range-wrap">
+                                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+                                    data-min="{{ min_price }}" data-max="{{ max_price }}"></div>
+                                <div class="range-slider">
+                                    <div class="price-input">
+                                        <p>Price:</p>
+                                        <input type="text" id="minamount" name="price_min" value="{{ price_min }}" placeholder="e.g., 100">
+                                        <input type="text" id="maxamount" name="price_max" value="{{ price_max }}" placeholder="e.g., 500">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <a href="#">Filter</a>
-                    </div>
-                    <div class="sidebar__sizes">
-                        <div class="section-title">
-                            <h4>Shop by size</h4>
-                        </div>
-                        <div class="size__list">
-                            <label for="xxs">
-                                xxs
-                                <input type="checkbox" id="xxs">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="xs">
-                                xs
-                                <input type="checkbox" id="xs">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="xss">
-                                xs-s
-                                <input type="checkbox" id="xss">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="s">
-                                s
-                                <input type="checkbox" id="s">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="m">
-                                m
-                                <input type="checkbox" id="m">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="ml">
-                                m-l
-                                <input type="checkbox" id="ml">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="l">
-                                l
-                                <input type="checkbox" id="l">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="xl">
-                                xl
-                                <input type="checkbox" id="xl">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="sidebar__color">
-                        <div class="section-title">
-                            <h4>Shop by size</h4>
-                        </div>
-                        <div class="size__list color__list">
-                            <label for="black">
-                                Blacks
-                                <input type="checkbox" id="black">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="whites">
-                                Whites
-                                <input type="checkbox" id="whites">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="reds">
-                                Reds
-                                <input type="checkbox" id="reds">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="greys">
-                                Greys
-                                <input type="checkbox" id="greys">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="blues">
-                                Blues
-                                <input type="checkbox" id="blues">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="beige">
-                                Beige Tones
-                                <input type="checkbox" id="beige">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="greens">
-                                Greens
-                                <input type="checkbox" id="greens">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="yellows">
-                                Yellows
-                                <input type="checkbox" id="yellows">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
+                            
+                            <!-- Filter by Size -->
+                            <div class="sidebar__sizes">
+                                <div class="section-title">
+                                    <h4>Shop by size</h4>
+                                </div>
+                                <div class="size__list">
+                                    {% for size in sizes %}
+                                    <label for="{{ size }}">
+                                        {{ size }}
+                                        <input type="checkbox" id="{{ size }}" name="sizes" value="{{ size }}" {% if size in selected_sizes %}checked{% endif %}>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    
+                            <!-- Filter by Color -->
+                            <div class="sidebar__color">
+                                <div class="section-title">
+                                    <h4>Shop by color</h4>
+                                </div>
+                                <div class="size__list color__list">
+                                    {% for color in colors %}
+                                    <label for="{{ color }}">
+                                        {{ color }}
+                                        <input type="checkbox" id="{{ color }}" name="colors" value="{{ color }}" {% if color in selected_colors %}checked{% endif %}>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <button type="submit">Filter</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -169,9 +112,17 @@
                 {% if products %}
                     {% for product in products %}
                         <div class="col-lg-4 col-md-6">
-                            <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="{% for image in product.image_set.all %}{% if forloop.first %}{{ image.image.url }}{% endif %}{% endfor %}">    
-                                    <div class="label new">New</div>
+                            <div class="product__item {% if product.discount > 0 %}sale{%endif%}">
+                                <div class="product__item__pic set-bg" data-setbg="{% for image in product.image_set.all %}{% if forloop.first %}{{ image.image.url }}{% endif %}{% endfor %}">
+                                    {% if product.is_new %}
+                                        <div class="label new">New</div>
+                                    {% endif %}
+                                    {% if product.discount > 0 %}
+                                        <div class="label sale">Sale</div>
+                                    {% endif %}
+                                    {% if product.stock == 0 %}
+                                        <div class="label stockout stockblue">Out Of Stock</div>
+                                    {% endif %}
                                     <ul class="product__hover">
                                         <li>
                                             <a href="{% for image in product.image_set.all %}{% if forloop.first %}{{ image.image.url }}{% endif %}{% endfor %}" class="image-popup"><span class="arrow_expand"></span>
@@ -182,7 +133,7 @@
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
-                                    <h6><a href="{{product.get_url}}">{{ product.product_name }}</a></h6>
+                                    <h6><a href="{{ product.get_url }}">{{ product.product_name }}</a></h6>
                                     <div class="rating">
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
@@ -190,7 +141,7 @@
                                         <i class="fa fa-star"></i>
                                         <i class="fa fa-star"></i>
                                     </div>
-                                    <div class="product__price">$ {{ product.price }}</div>
+                                    <div class="product__price">$ {%if product.discount > 0 %}{{ product.discounted_price}} <span>$ {{product.sell_price}}</span>{%else%}{{product.price}}{%endif%}</div>
                                 </div>
                             </div>
                         </div>
@@ -198,16 +149,26 @@
                 {% else %}
                     <h3>No products available</h3>
                 {% endif %}
-        <div class="col-lg-12 text-center">
-            <div class="pagination__option">
-                <a href="#">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#"><i class="fa fa-angle-right"></i></a>
+                <div class="col-lg-12 text-center">
+                    <div class="pagination__option">
+                        {% if products.has_previous %}
+                            <a href="?page={{ products.previous_page_number }}"><i class="fa fa-angle-left"></i></a>
+                        {% endif %}
+                
+                        {% for num in products.paginator.page_range %}
+                            {% if products.number == num %}
+                                <a class="active" href="?page={{ num }}">{{ num }}</a>
+                            {% else %}
+                                <a href="?page={{ num }}">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+                
+                        {% if products.has_next %}
+                            <a href="?page={{ products.next_page_number }}"><i class="fa fa-angle-right"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
         </div>
     </div>
 </section>

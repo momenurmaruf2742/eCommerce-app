@@ -51,7 +51,7 @@
                             <i class="fa fa-star"></i>
                             <span>( 138 reviews )</span>
                         </div>
-                        <div class="product__details__price">$ {{ single_product.discounted_price}} <span>$ {{single_product.sell_price}}</span></div>
+                        <div class="product__details__price">$ {%if single_product.discount > 0 %}{{ single_product.discounted_price}} <span>$ {{single_product.sell_price}}</span>{%else%}{{single_product.price}}{%endif%}</span></div>
                         <p>{{single_product.description}}</p>
                         <div class="product__details__button">
                             <div class="quantity">
